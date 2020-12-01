@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "s3er.fullname" . }}-main-py
+  labels:
+    {{- include "s3er.labels" . | nindent 4 }}
+data:
+  main.py: |
+    #import boto3
+    import os
+    import time
+
+    if os.environ["SLEEP_SECONDS"]:
+      sleep_seconds = int(os.environ["SLEEP_SECONDS"])
+    else:
+      sleep_seconds = 60
+
+    print("hello world!")
+    print(f"sleeping for {sleep_seconds} seconds!")
+    time.sleep(sleep_seconds)
+
+    print("awoken!")
+    print("quitting successfully.")

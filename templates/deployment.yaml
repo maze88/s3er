@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "s3er.fullname" . }}
+  labels:
+    {{- include "s3er.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "s3er.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "s3er.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "s3er.serviceAccountName" . }}
+      volumes:
+      - name: requirements-txt
+        configMap:
+          name: {{ include "s3er.fullname" . }}-requirements-txt
+      - name: main-py
+        configMap:
+          name: {{ include "s3er.fullname" . }}-main-py
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: SLEEP_SECONDS
+          value: {{ quote .Values.conf.sleepSeconds }}
+        volumeMounts:
+        - name: requirements-txt
+          mountPath: /app/requirements.txt
+          subPath: requirements.txt
+        - name: main-py
+          mountPath: /app/main.py
+          subPath: main.py
+        command:
+        - "python"
+        - "/app/main.py"

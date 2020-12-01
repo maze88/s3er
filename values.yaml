@@ -1,0 +1,24 @@
+# Default values for s3er.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  name: python
+  tag: 3.8
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_NUMBER:role/CLUSTER_NAME-eks-oidc-s3-bucket-accesser
+
+conf:
+  # The amount of seconds the script will sleep
+  sleepSeconds: 15
