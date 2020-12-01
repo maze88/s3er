@@ -22,3 +22,8 @@ serviceAccount:
 conf:
   # The amount of seconds the script will sleep
   sleepSeconds: 15
+  aws:
+    eks:
+      bucketName: 
+      accountNumber:  # probably won't need, already in serviceAccount.annotations...
+      clusterName:  # might need, just if bucketname is derived from it...
