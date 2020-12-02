@@ -20,10 +20,9 @@ serviceAccount:
     eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_NUMBER:role/CLUSTER_NAME-eks-oidc-s3-bucket-accesser
 
 conf:
-  # The amount of seconds the script will sleep
-  sleepSeconds: 15
   aws:
     eks:
-      bucketName: 
-      accountNumber:  # probably won't need, already in serviceAccount.annotations...
-      clusterName:  # might need, just if bucketname is derived from it...
+      # The name of the bucket to interact with
+      bucketName:
+  # The amount of seconds the script will sleep
+  sleepSeconds:

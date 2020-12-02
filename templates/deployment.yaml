@@ -16,26 +16,21 @@ spec:
     spec:
       serviceAccountName: {{ include "s3er.serviceAccountName" . }}
       volumes:
-      - name: requirements-txt
+      - name: app-files
         configMap:
-          name: {{ include "s3er.fullname" . }}-requirements-txt
-      - name: main-py
-        configMap:
-          name: {{ include "s3er.fullname" . }}-main-py
+          name: {{ include "s3er.fullname" . }}-app-files
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
+        - name: BUCKET_NAME
+          value: {{ quote .Values.conf.aws.eks.bucketName }}
         - name: SLEEP_SECONDS
           value: {{ quote .Values.conf.sleepSeconds }}
         volumeMounts:
-        - name: requirements-txt
-          mountPath: /app/requirements.txt
-          subPath: requirements.txt
-        - name: main-py
-          mountPath: /app/main.py
-          subPath: main.py
+        - name: app-files
+          mountPath: /app
         command:
-        - "python"
-        - "/app/main.py"
+        - "sh"
+        - "/app/entrypoint.sh"

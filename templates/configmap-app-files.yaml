@@ -1,39 +1,46 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "s3er.fullname" . }}-main-py
+  name: {{ include "s3er.fullname" . }}-app-files
   labels:
     {{- include "s3er.labels" . | nindent 4 }}
 data:
-  main.py: |
-    #import boto3
+  entrypoint.sh: |
+    pip install -r /app/requirements.txt
+    python /app/poc.py
+    #python /app/main.py
+
+  requirements.txt: |
+    boto3
+
+  poc.py: |
     import os
     import time
+    from random import randint
 
-    if os.environ["SLEEP_SECONDS"]:
-      sleep_seconds = int(os.environ["SLEEP_SECONDS"])
-    else:
-      sleep_seconds = 60
+    print("welcome!")
+    while True:
+      sleep_seconds = randint(8, 32)
+      print(f"sleeping for {str(sleep_seconds)} seconds!")
+      time.sleep(sleep_seconds)
 
-    print("hello world!")
-    print(f"sleeping for {sleep_seconds} seconds!")
-    time.sleep(sleep_seconds)
-
-    print("awoken!")
-    print("quitting successfully.")
-  app.py: |
+  main.py: |
     import boto3
     import os
     from time import sleep,time
     from random import randint
 
     # conf
-    demo_filename = "/tmp/demo-file"
+    demo_filename = "/tmp/demo-file.txt"
     bucket_name = os.environ["BUCKET_NAME"]
     try:
       sleep_seconds_override = os.environ["SLEEP_SECONDS"]
     except KeyError:
-      pass
+      sleep_seconds_override = None
+
+    def ls(bucket_name):
+      objects = s3.list_objects(Bucket=bucket_name)
+      return objects
 
     # touch file
     print(f"writing demo data to demo file `{demo_filename}`...")
@@ -42,32 +49,27 @@ data:
 
     # s3 init
     s3 = boto3.client("s3")
-    while true:
-      # list
-      objects = s3.list_objects(Bucket=bucket_name)
-      print(objects)
 
-      # new filename
-      timestamp = str(round(time()))
-      object_key = f"mz-demo-{timestamp}"
+    # main loop
+    while True:
+      print(ls(bucket_name))
 
       # upload
+      timestamp = str(round(time()))
+      object_key = f"mz-demo-{timestamp}"
       up = s3.upload_file(Filename=demo_filename, Bucket=bucket_name, Key=object_key)
       print(up)
-
-      # list
-      objects = s3.list_objects(Bucket=bucket_name)
-      print(objects)
+      print(ls(bucket_name))
 
       # sleep
       if sleep_seconds_override:
         sleep_seconds = sleep_seconds_override
       else:
-        sleep_seconds = randint(8, 32)
+        sleep_seconds = randint(10, 30)
       print(f"\nsleeping for {sleep_seconds} seconds...\n\n")
       sleep(sleep_seconds)
 
-      # delete
-      delete = s3.delete_object(object_key)
-      print(delete)
+      # remove
+      rm = s3.delete_object(object_key)
+      print(rm)
 
