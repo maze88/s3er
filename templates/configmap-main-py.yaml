@@ -21,3 +21,53 @@ data:
 
     print("awoken!")
     print("quitting successfully.")
+  app.py: |
+    import boto3
+    import os
+    from time import sleep,time
+    from random import randint
+
+    # conf
+    demo_filename = "/tmp/demo-file"
+    bucket_name = os.environ["BUCKET_NAME"]
+    try:
+      sleep_seconds_override = os.environ["SLEEP_SECONDS"]
+    except KeyError:
+      pass
+
+    # touch file
+    print(f"writing demo data to demo file `{demo_filename}`...")
+    with open(demo_filename, "w") as f:
+      f.write("demo data")
+
+    # s3 init
+    s3 = boto3.client("s3")
+    while true:
+      # list
+      objects = s3.list_objects(Bucket=bucket_name)
+      print(objects)
+
+      # new filename
+      timestamp = str(round(time()))
+      object_key = f"mz-demo-{timestamp}"
+
+      # upload
+      up = s3.upload_file(Filename=demo_filename, Bucket=bucket_name, Key=object_key)
+      print(up)
+
+      # list
+      objects = s3.list_objects(Bucket=bucket_name)
+      print(objects)
+
+      # sleep
+      if sleep_seconds_override:
+        sleep_seconds = sleep_seconds_override
+      else:
+        sleep_seconds = randint(8, 32)
+      print(f"\nsleeping for {sleep_seconds} seconds...\n\n")
+      sleep(sleep_seconds)
+
+      # delete
+      delete = s3.delete_object(object_key)
+      print(delete)
+
