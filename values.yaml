@@ -23,6 +23,6 @@ conf:
   aws:
     eks:
       # The name of the bucket to interact with
-      bucketName:
-  # The amount of seconds the script will sleep
-  sleepSeconds:
+      bucketName: mz-demo-bucket
+  # The amount of seconds the main loop will sleep between iterations (leave blank for random)
+  sleepSecondsOverride:

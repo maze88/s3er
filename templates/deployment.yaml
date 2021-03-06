@@ -26,8 +26,8 @@ spec:
         env:
         - name: BUCKET_NAME
           value: {{ quote .Values.conf.aws.eks.bucketName }}
-        - name: SLEEP_SECONDS
-          value: {{ quote .Values.conf.sleepSeconds }}
+        - name: SLEEP_SECONDS_OVERRIDE
+          value: {{ quote .Values.conf.sleepSecondsOverride }}
         volumeMounts:
         - name: app-files
           mountPath: /app

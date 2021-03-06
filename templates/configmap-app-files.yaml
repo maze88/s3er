@@ -28,48 +28,54 @@ data:
     import boto3
     import os
     from time import sleep,time
-    from random import randint
 
-    # conf
-    demo_filename = "/tmp/demo-file.txt"
+    # configuration
     bucket_name = os.environ["BUCKET_NAME"]
     try:
-      sleep_seconds_override = os.environ["SLEEP_SECONDS"]
+      sleep_seconds = os.environ["SLEEP_SECONDS_OVERRIDE"]
     except KeyError:
-      sleep_seconds_override = None
+      sleep_seconds = 8
 
-    def ls(bucket_name):
-      objects = s3.list_objects(Bucket=bucket_name)
-      return objects
-
-    # touch file
-    print(f"writing demo data to demo file `{demo_filename}`...")
-    with open(demo_filename, "w") as f:
-      f.write("demo data")
-
-    # s3 init
-    s3 = boto3.client("s3")
-
-    # main loop
-    while True:
-      print(ls(bucket_name))
-
-      # upload
-      timestamp = str(round(time()))
-      object_key = f"mz-demo-{timestamp}"
-      up = s3.upload_file(Filename=demo_filename, Bucket=bucket_name, Key=object_key)
-      print(up)
-      print(ls(bucket_name))
-
-      # sleep
-      if sleep_seconds_override:
-        sleep_seconds = sleep_seconds_override
+    # define functions
+    def ls_bucket(bucket_name):
+      response = s3.list_objects(Bucket=bucket_name)
+      if "Contents" in response.keys():
+        return [object["Key"] for object in response["Contents"]]
       else:
-        sleep_seconds = randint(10, 30)
-      print(f"\nsleeping for {sleep_seconds} seconds...\n\n")
-      sleep(sleep_seconds)
+        return []
 
-      # remove
-      rm = s3.delete_object(object_key)
-      print(rm)
+    def main():
+      i = 0
+      while True:
+        i += 1
+        print(f"\n---- iteration {i} ----")
+        object_key = f"demofile{i}.txt"
+        object_body = f"written at {str(round(time()))}"
 
+        # upload
+        print(f"uploading object '{bucket_name}/{object_key}'...")
+        print(f"{s3.put_object(Bucket=bucket_name, Key=object_key, Body=object_body)['ResponseMetadata']['HTTPStatusCode']}!")
+        print(f"bucket '{bucket_name}' contents: {ls_bucket(bucket_name)}")
+
+        # sleep
+        print(f"sleeping for {sleep_seconds} seconds...")
+        sleep(sleep_seconds)
+
+        # remove
+        print(f"removing object '{bucket_name}/{object_key}'...")
+        print(f"{s3.delete_object(Bucket=bucket_name, Key=object_key)['ResponseMetadata']['HTTPStatusCode']}!")
+        print(f"bucket '{bucket_name}' contents: {ls_bucket(bucket_name)}")
+
+    if __name__ == "__main__":
+      # s3 init
+      s3 = boto3.client("s3")
+
+      # verify bucket exists
+      try:
+        s3.head_bucket(Bucket=bucket_name)["ResponseMetadata"]["HTTPStatusCode"]
+      except:
+        print("ERROR: bucket doesn't exist!")
+        print("quitting...")
+        exit(1)
+
+      main()
