@@ -6,23 +6,8 @@ metadata:
     {{- include "s3er.labels" . | nindent 4 }}
 data:
   entrypoint.sh: |
-    pip install -r /app/requirements.txt
-    python /app/poc.py
-    #python /app/main.py
-
-  requirements.txt: |
-    boto3
-
-  poc.py: |
-    import os
-    import time
-    from random import randint
-
-    print("welcome!")
-    while True:
-      sleep_seconds = randint(8, 32)
-      print(f"sleeping for {str(sleep_seconds)} seconds!")
-      time.sleep(sleep_seconds)
+    pip install boto3
+    python -u /app/main.py  # -u Forces the python stdout and stderr streams to be unbuffered, to allow realtime logging from daemon container.
 
   main.py: |
     import boto3
@@ -71,11 +56,7 @@ data:
       s3 = boto3.client("s3")
 
       # verify bucket exists
-      try:
-        s3.head_bucket(Bucket=bucket_name)["ResponseMetadata"]["HTTPStatusCode"]
-      except:
-        print("ERROR: bucket doesn't exist!")
-        print("quitting...")
-        exit(1)
+      s3.head_bucket(Bucket=bucket_name)["ResponseMetadata"]["HTTPStatusCode"]
 
+      # trigger main loop
       main()

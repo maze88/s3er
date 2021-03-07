@@ -1,17 +1,11 @@
-# Default values for s3er.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
+# deployment
 replicaCount: 1
-
 image:
   name: python
   tag: 3.8
   pullPolicy: IfNotPresent
 
-nameOverride: ""
-fullnameOverride: ""
-
+# service account
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -19,10 +13,14 @@ serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_NUMBER:role/CLUSTER_NAME-eks-oidc-s3-bucket-accesser
 
+# application configuration
 conf:
   aws:
-    eks:
+    s3:
       # The name of the bucket to interact with
       bucketName: mz-demo-bucket
+      # The region in which the bucket was created
+      bucketRegion: eu-west-2
   # The amount of seconds the main loop will sleep between iterations (leave blank for random)
   sleepSecondsOverride:
+
