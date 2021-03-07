@@ -1,14 +1,7 @@
-# s3er - A simple app for a complex demo
+# S3er mock app chart for demoing AWS IAM Roles for K8s ServiceAccounts via OIDC
 
 ## About
+This helm chart is for a mock application which interacts with AWS, for a demo project about granting AWS IAM roles to Kubernetes Pods using ServiceAccounts and OIDC. The application uploads and deletes mock files from an S3 bucket every several seconds, logging each iteration and listing the bucket contents.
 
-This helm chart creates a k8s app that sleeps for the amount of seconds set in a helm value.
-
-## TODO:
-- install boto 3 in container using: `pip install -r requirements.txt` or `pip install boto3`.
-- make app that can put or delete objects from s3 bucket.
-- make it periodically do so, alternating.
-- update above About section with appropriate functionality.
-
-## Documentation links:
-- https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
+## AWS documentation link
+https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
