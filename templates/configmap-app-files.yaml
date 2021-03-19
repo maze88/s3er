@@ -10,9 +10,14 @@ data:
     python -u /app/main.py  # -u Forces the python stdout and stderr streams to be unbuffered, to allow realtime logging from daemon container.
 
   main.py: |
+    #!/usr/bin/python
+
     import boto3
     import os
     from time import sleep,time
+
+    # s3 init
+    s3 = boto3.client("s3")
 
     # configuration
     bucket_name = os.environ["BUCKET_NAME"]
@@ -30,6 +35,15 @@ data:
         return []
 
     def main():
+      # s3 verification
+      try:
+        s3.head_bucket(Bucket=bucket_name)["ResponseMetadata"]["HTTPStatusCode"]
+      except:
+        print("ERROR: bucket doesn't exist!")
+        print("quitting...")
+        exit(1)
+
+      # main loop
       i = 0
       while True:
         i += 1
@@ -52,11 +66,4 @@ data:
         print(f"bucket '{bucket_name}' contents: {ls_bucket(bucket_name)}")
 
     if __name__ == "__main__":
-      # s3 init
-      s3 = boto3.client("s3")
-
-      # verify bucket exists
-      s3.head_bucket(Bucket=bucket_name)["ResponseMetadata"]["HTTPStatusCode"]
-
-      # trigger main loop
       main()
