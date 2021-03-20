@@ -24,10 +24,6 @@ spec:
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
-        - name: AWS_ACCESS_KEY_ID
-          value: 
-        - name: AWS_SECRET_ACCESS_KEY
-          value: 
         - name: AWS_DEFAULT_REGION
           value: {{ .Values.conf.aws.s3.bucketRegion }}
         - name: BUCKET_NAME

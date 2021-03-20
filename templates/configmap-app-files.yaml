@@ -7,6 +7,7 @@ metadata:
 data:
   entrypoint.sh: |
     pip install boto3
+    env
     python -u /app/main.py  # -u Forces the python stdout and stderr streams to be unbuffered, to allow realtime logging from daemon container.
 
   main.py: |
@@ -21,10 +22,12 @@ data:
 
     # configuration
     bucket_name = os.environ["BUCKET_NAME"]
+    print(f"bucket_name set to {bucket_name}")
     try:
       sleep_seconds = os.environ["SLEEP_SECONDS_OVERRIDE"]
     except KeyError:
       sleep_seconds = 8
+    print(f"sleep_seconds set to {sleep_seconds}")
 
     # define functions
     def ls_bucket(bucket_name):
@@ -39,7 +42,7 @@ data:
       try:
         s3.head_bucket(Bucket=bucket_name)["ResponseMetadata"]["HTTPStatusCode"]
       except:
-        print("ERROR: bucket doesn't exist!")
+        print("ERROR: bucket inaccessible or doesn't exist!")
         print("quitting...")
         exit(1)
 
