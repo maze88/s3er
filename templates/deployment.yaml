@@ -16,7 +16,7 @@ spec:
     spec:
       serviceAccountName: {{ include "s3er.serviceAccountName" . }}
       volumes:
-      - name: app-files
+      - name: app
         configMap:
           name: {{ include "s3er.fullname" . }}-app-files
       containers:
@@ -33,7 +33,7 @@ spec:
           value: {{ quote .Values.conf.sleepSecondsOverride }}
         {{ end }}
         volumeMounts:
-        - name: app-files
+        - name: app
           mountPath: /app
         command:
         - "sh"
