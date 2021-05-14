@@ -22,5 +22,5 @@ conf:
       # The region in which the bucket was created
       bucketRegion: eu-west-2
   # The amount of seconds the main loop will sleep between iterations (leave blank for random)
-  sleepSecondsOverride: 6
+  sleepSecondsOverride:
 
