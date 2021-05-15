@@ -7,7 +7,6 @@ metadata:
 data:
   entrypoint.sh: |
     pip install -r /app/requirements.txt
-    env
     python -u /app/main.py  # -u Forces the python stdout and stderr streams to be unbuffered, to allow realtime logging from daemon container.
 
   requirements.txt: |
