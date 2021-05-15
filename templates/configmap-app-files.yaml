@@ -10,9 +10,9 @@ data:
     env
     python -u /app/main.py  # -u Forces the python stdout and stderr streams to be unbuffered, to allow realtime logging from daemon container.
 
-  requirement.txt: |
-    {{- .Files.Get "s3er/requirements.txt" | nindent 4 }}
+  requirements.txt: |
+    {{- .Files.Get "app/requirements.txt" | nindent 4 }}
 
   main.py: |
-    {{- .Files.Get "s3er/main.py" | nindent 4 }}
+    {{- .Files.Get "app/main.py" | nindent 4 }}
 
