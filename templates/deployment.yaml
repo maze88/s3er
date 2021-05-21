@@ -22,7 +22,7 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        imagePullPolicy: IfNotPresent
         env:
         - name: AWS_DEFAULT_REGION
           value: {{ .Values.conf.aws.s3.bucketRegion }}
