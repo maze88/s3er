@@ -5,7 +5,7 @@ This helm chart is for a mock application which interacts with AWS, for a demo p
 
 ## Cloud prerequisites (and creation instructions/references)
 - AWS S3 bucket - can be created with `aws s3 mb s3://your-bucket-name --region your-region`.
-- AWS IAM role with attached policy granting permissions to act in above bucket - TBD: `aws TBD`.
+- AWS IAM role with attached policy granting permissions to act in above bucket - instruction available in [AWS documentation](https://docs.aws.amazon.com/eks/latest/userguide/create-service-account-iam-policy-and-role.html).
 - AWS EKS cluster with OIDC Identity provider - can be created using the `oidc` branch from my repository [eks-spot-cluster](../../../eks-spot-cluster).
 
 ## Architecture
