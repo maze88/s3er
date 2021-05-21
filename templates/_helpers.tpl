@@ -50,5 +50,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "s3er.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
-
-{{/*
