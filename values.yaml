@@ -11,7 +11,7 @@ serviceAccount:
   create: true
   # Annotations to add to the service account
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_NUMBER:role/CLUSTER_NAME-eks-oidc-s3-bucket-accesser
+    eks.amazonaws.com/role-arn: arn:aws:iam::291615460784:role/demo-eks-oidc-s3-bucket-accesser
 
 # application configuration
 conf:
