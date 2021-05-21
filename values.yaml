@@ -3,7 +3,6 @@ replicaCount: 1
 image:
   name: python
   tag: 3.8
-  pullPolicy: IfNotPresent
 
 # service account
 serviceAccount:
