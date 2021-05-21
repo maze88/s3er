@@ -14,7 +14,7 @@ spec:
       labels:
         {{- include "s3er.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "s3er.serviceAccountName" . }}
+      serviceAccountName: {{ include "s3er.fullname" . }}
       volumes:
       - name: app
         configMap:

@@ -46,12 +46,6 @@ if __name__ == "__main__":
     exit(1)
 
   try:
-    s3.head_bucket(Bucket=bucket_name)["ResponseMetadata"]["HTTPStatusCode"]
-  except boto3.exceptions.botocore.exceptions.ClientError as e:
-    print(f"ERROR: For bucket '{bucket_name}': {e}")
-    exit(1)
-
-  try:
     sleep_seconds = os.environ["SLEEP_SECONDS_OVERRIDE"]
   except KeyError:
     sleep_seconds = 8
