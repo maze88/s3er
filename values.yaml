@@ -11,14 +11,14 @@ serviceAccount:
   create: true
   # Annotations to add to the service account
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_NUMBER:role/CLUSTER_NAME-eks-oidc-s3-bucket-accesser
+    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_NUMBER:role/ROLE_NAME
 
 # application configuration
 conf:
   aws:
     s3:
       # The name of the bucket to interact with
-      bucketName: mz-demo-bucket
+      bucketName: BUCKET_NAME
       # The region in which the bucket was created
       bucketRegion: eu-west-2
   # The amount of seconds the main loop will sleep between iterations (leave blank for random)
