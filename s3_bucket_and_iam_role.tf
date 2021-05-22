@@ -1,5 +1,11 @@
+terraform {
+  required_version = ">= 0.13"
+}
+
 provider "aws" {
-  region = "eu-west-2"
+  version = ">= 2.28.1"
+  profile = "default"
+  region  = "eu-west-2"
 }
 
 resource "aws_s3_bucket" "demo_bucket" {
@@ -60,6 +66,6 @@ resource "aws_iam_role" "demo_eks_oidc_s3_bucket_accesser" {
 }
 
 resource "aws_iam_role_policy_attachment" "demo_eks_oidc_s3_bucket_accesser" {
-  policy_arn = aws_iam_policy.demo_eks_oidc_s3_bucket_accesser.arn
+  policy_arn = aws_iam_policy.ls_bucket_and_all_object_actions.arn
   role       = aws_iam_role.demo_eks_oidc_s3_bucket_accesser.name
 }
