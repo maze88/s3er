@@ -1,16 +1,7 @@
-terraform {
-  required_version = ">= 0.13"
-}
-
-provider "aws" {
-  version = ">= 2.28.1"
-  profile = "default"
-  region  = "eu-west-2"
-}
+data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "demo_bucket" {
-  // CHANGEME!
-  bucket = "mz-demo-bucket-tf"
+  bucket = var.bucket_name
 }
 
 resource "aws_s3_bucket_public_access_block" "demo_bucket" {
@@ -51,13 +42,11 @@ resource "aws_iam_role" "demo_eks_oidc_s3_bucket_accesser" {
         Action    = "sts:AssumeRoleWithWebIdentity"
         Effect    = "Allow"
         Principal = {
-          // CHANGEME! (account number, region, id)
-          "Federated" = "arn:aws:iam::291615460784:oidc-provider/oidc.eks.eu-west-2.amazonaws.com/id/71E28602A1EF7B2894FBD143868BDC38"
+          "Federated" = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${var.oidc_provider}"
         }
         Condition = {
           StringEquals = {
-            // CHANGEME! (account number, region, id)
-            "oidc.eks.eu-west-2.amazonaws.com/id/71E28602A1EF7B2894FBD143868BDC38:sub" = "system:serviceaccount:default:demo-s3er"
+            "${var.oidc_provider}:sub" = "system:serviceaccount:${var.service_account_namespace}:${var.service_account_name}"
           }
         }
       }
