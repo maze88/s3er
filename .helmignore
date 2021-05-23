@@ -22,4 +22,4 @@
 *.tmproj
 .vscode/
 # mz-demo
-tf/
+terraform/

@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_policy" "ls_bucket_and_all_object_actions" {
-  name   = "demo-eks-oidc-s3-bucket-accesser-tf"
+  name   = "demo-eks-oidc-s3-bucket-accesser"
   path   = "/"
   policy = jsonencode({
     Version   = "2012-10-17"
