@@ -1,5 +1,4 @@
+*.swp
 .terraform
 *.tfstate*
 *.tfvars
-*.swp
-
