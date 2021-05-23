@@ -1,17 +1,5 @@
 data "aws_caller_identity" "current" {}
 
-resource "aws_s3_bucket" "demo_bucket" {
-  bucket = var.bucket_name
-}
-
-resource "aws_s3_bucket_public_access_block" "demo_bucket" {
-  bucket                  = aws_s3_bucket.demo_bucket.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
 resource "aws_iam_policy" "ls_bucket_and_all_object_actions" {
   name   = "demo-eks-oidc-s3-bucket-accesser-tf"
   path   = "/"
