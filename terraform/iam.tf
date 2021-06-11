@@ -1,6 +1,6 @@
 data "aws_caller_identity" "current" {}
 
-resource "aws_iam_policy" "ls_bucket_and_all_object_actions" {
+resource "aws_iam_policy" "all_object_actions_and_ls_bucket" {
   name   = "demo-eks-oidc-s3-bucket-accesser"
   path   = "/"
   policy = jsonencode({
@@ -22,7 +22,7 @@ resource "aws_iam_policy" "ls_bucket_and_all_object_actions" {
 }
 
 resource "aws_iam_role" "demo_eks_oidc_s3_bucket_accesser" {
-  name               = aws_iam_policy.ls_bucket_and_all_object_actions.name
+  name               = aws_iam_policy.all_object_actions_and_ls_bucket.name
   assume_role_policy = jsonencode({
     Version   = "2012-10-17"
     Statement = [
@@ -43,6 +43,6 @@ resource "aws_iam_role" "demo_eks_oidc_s3_bucket_accesser" {
 }
 
 resource "aws_iam_role_policy_attachment" "demo_eks_oidc_s3_bucket_accesser" {
-  policy_arn = aws_iam_policy.ls_bucket_and_all_object_actions.arn
+  policy_arn = aws_iam_policy.all_object_actions_and_ls_bucket.arn
   role       = aws_iam_role.demo_eks_oidc_s3_bucket_accesser.name
 }
