@@ -7,7 +7,7 @@ variable "bucket_name" {
 variable "oidc_provider" {
   type        = string
   description = "The OIDC provider URL"
-  default     = "oidc.eks.eu-west-2.amazonaws.com/id/CHANGE_ME"  # without the https:// prefix
+  default     = "oidc.eks.eu-west-2.amazonaws.com/id/CHANGE_ME"  # without an https:// prefix
 }
 
 variable "service_account_namespace" {
