@@ -14,11 +14,11 @@ spec:
       labels:
         {{- include "s3er.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "s3er.fullname" . }}
       volumes:
       - name: app
         configMap:
           name: {{ include "s3er.fullname" . }}-app-files
+      {{ if .Values.serviceAccount.create }}serviceAccountName: {{ include "s3er.fullname" . }}{{ end }}
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
